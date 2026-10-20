@@ -1,18 +1,15 @@
-use eframe::{self, egui};
-#[derive(Default)]
-struct MyApp {}
-impl eframe::App for MyApp {
-    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        egui::CentralPanel::default().show(ui, |ui| {});
-    }
-}
+mod app;
 
-fn main() -> Result<(), eframe::Error> {
-    println!("Hello, world!");
-    let native_options = eframe::NativeOptions::default();
+use app::MyApp;
+
+const APP_NAME: &str = "Closet";
+
+fn main() -> eframe::Result {
+    let options = eframe::NativeOptions::default();
+
     eframe::run_native(
-        "Closet",
-        native_options,
+        APP_NAME,
+        options,
         Box::new(|_cc| Ok(Box::new(MyApp::default()))),
-    );
+    )
 }
