@@ -1,11 +1,10 @@
 mod app;
-
 use app::MyApp;
+use log::*;
 
-const APP_NAME: &str = "Closet";
+pub const APP_NAME: &str = "Closet";
 
 fn main() -> eframe::Result {
-    egui_logger::builder().init().unwrap();
     let options = eframe::NativeOptions {
         centered: true,
         ..Default::default()
