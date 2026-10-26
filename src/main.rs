@@ -1,6 +1,7 @@
 mod app;
+mod misc;
+
 use app::MyApp;
-use log::*;
 
 pub const APP_NAME: &str = "Closet";
 
@@ -13,9 +14,6 @@ fn main() -> eframe::Result {
     eframe::run_native(
         APP_NAME,
         options,
-        Box::new(|cc| {
-            app::set_font(&cc.egui_ctx);
-            Ok(Box::new(MyApp::default()))
-        }),
+        Box::new(|_cc| Ok(Box::new(MyApp::default()))),
     )
 }

@@ -1,66 +1,61 @@
 use eframe::egui;
-use egui_commonmark;
-use tokio;
+use std::{
+    sync::mpsc::{self, Receiver, Sender, TryRecvError},
+    time::Duration,
+};
+use tokio::runtime::Runtime;
 
-use std::sync::mpsc::{self, Receiver, Sender};
-
-const CHANGELOG_URL: &str = "";
-
-struct markdown {
+/// Runs HTTP requests on a Tokio runtime and sends their results back to the UI thread.
+pub struct MarkdownFetcher {
     runtime: Runtime,
     tx: Sender<Result<String, String>>,
     rx: Receiver<Result<String, String>>,
-
-    markdown: Option<String>,
-    loading: bool,
-    error: Options<String>,
-
-    cache: egui_commonmark::CommonMarkCache,
 }
 
-impl Default for markdown {
+impl Default for MarkdownFetcher {
     fn default() -> Self {
         let (tx, rx) = mpsc::channel();
 
         Self {
-            runtime: Runtime::new().expect("Failed to create tokio runtime"),
+            runtime: Runtime::new().expect("Failed to create Tokio runtime"),
             tx,
             rx,
-            markdown: None,
-            loading: False,
-            error: None,
-            cachy: egui_commonmark::CommonMarkCache::default(),
         }
     }
+}
 
-    fn fetch(&mut self, ctx: egui::contect) {
-        self.loading = true;
-        self.error = None;
-
+impl MarkdownFetcher {
+    /// Starts fetching a URL without blocking egui's UI thread.
+    pub fn fetch(&self, url: String, ctx: egui::Context) {
         let tx = self.tx.clone();
 
         self.runtime.spawn(async move {
             let result: Result<String, String> = async {
                 let client = reqwest::Client::builder()
-                    .timeout(std::time::Duration::from_secs(10))
+                    .timeout(Duration::from_secs(15))
                     .build()
-                    .map_err(|e| e.to_string())?;
+                    .map_err(|err| err.to_string())?;
 
-                let text = client
-                    .get(CHANGELOG_URL)
+                let response = client
+                    .get(url)
                     .send()
                     .await
-                    .map_err(|e| e.to_string())?
+                    .map_err(|err| err.to_string())?
                     .error_for_status()
-                    .map_err(|e| e.to_string())?
-                    .text()
-                    .await
-                    .map_err(|e| e.to_string())?;
-                Ok(text)
-            };
-            let _ = tx.send(result);
+                    .map_err(|err| err.to_string())?;
 
+                response.text().await.map_err(|err| err.to_string())
+            }
+            .await;
+
+            // The UI thread receives the result on its next frame.
+            let _ = tx.send(result);
             ctx.request_repaint();
-        })
+        });
+    }
+
+    /// Returns a completed request result, if one is ready.
+    pub fn try_recv(&self) -> Result<Result<String, String>, TryRecvError> {
+        self.rx.try_recv()
     }
 }
