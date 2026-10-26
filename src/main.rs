@@ -13,6 +13,9 @@ fn main() -> eframe::Result {
     eframe::run_native(
         APP_NAME,
         options,
-        Box::new(|_cc| Ok(Box::new(MyApp::default()))),
+        Box::new(|cc| {
+            app::set_font(&cc.egui_ctx);
+            Ok(Box::new(MyApp::default()))
+        }),
     )
 }
