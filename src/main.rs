@@ -5,7 +5,11 @@ use app::MyApp;
 const APP_NAME: &str = "Closet";
 
 fn main() -> eframe::Result {
-    let options = eframe::NativeOptions::default();
+    egui_logger::builder().init().unwrap();
+    let options = eframe::NativeOptions {
+        centered: true,
+        ..Default::default()
+    };
 
     eframe::run_native(
         APP_NAME,
