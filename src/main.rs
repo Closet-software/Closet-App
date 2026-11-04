@@ -1,5 +1,6 @@
 mod app;
 mod misc;
+mod ui;
 
 use app::MyApp;
 
