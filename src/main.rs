@@ -15,6 +15,9 @@ fn main() -> eframe::Result {
     eframe::run_native(
         APP_NAME,
         options,
-        Box::new(|_cc| Ok(Box::new(MyApp::default()))),
+        Box::new(|cc| {
+            egui_extras::install_image_loaders(&cc.egui_ctx);
+            Ok(Box::new(MyApp::default()))
+        }),
     )
 }
