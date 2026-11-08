@@ -25,7 +25,7 @@ impl About {
             .resizable([false, false])
             .scroll(false)
             .constrain_to(ui.available_rect_before_wrap())
-            .default_pos(center) // <-- add this
+            .default_pos(center)
             .pivot(egui::Align2::CENTER_CENTER)
             .show(ui.ctx(), |ui| {
                 self.ui(ui);

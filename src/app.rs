@@ -19,6 +19,7 @@ impl eframe::App for MyApp {
         ui.style_mut().override_font_id =
             Some(egui::FontId::new(17.0, egui::FontFamily::Proportional));
 
+        //Panels
         egui::Panel::top("top_panel").show(ui, |ui| {
             egui::MenuBar::new().ui(ui, |ui| {
                 ui.menu_button("Closet", |ui| {
@@ -26,7 +27,16 @@ impl eframe::App for MyApp {
                         self.windows.about.is_open = true;
                         ui.close();
                     }
+                    if ui.button("Check for updates").clicked() {}
+                    if ui.button("Quit").clicked() {
+                        ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
+                    }
                 });
+                ui.menu_button("File", |ui| {
+                    if ui.button("New").clicked() {
+                        //
+                    }
+                })
             });
         });
         self.windows.about.show(ui);
