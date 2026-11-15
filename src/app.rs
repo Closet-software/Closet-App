@@ -1,7 +1,6 @@
+use crate::ui::panels::TopBar;
 use crate::ui::windows::About;
-use eframe::egui::{self};
-
-//const CHANGELOG_URL: &str = "https://raw.githubusercontent.com/emilk/egui/refs/heads/main/README.md";
+use eframe::egui;
 
 #[derive(Default)]
 struct Windows {
@@ -11,34 +10,20 @@ struct Windows {
 #[derive(Default)]
 pub struct MyApp {
     windows: Windows,
+    top_bar: TopBar,
+    show_top_bar: bool,
 }
 
 impl eframe::App for MyApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        //setup font
+        // Setup font
         ui.style_mut().override_font_id =
             Some(egui::FontId::new(17.0, egui::FontFamily::Proportional));
-
-        //Panels
-        egui::Panel::top("top_panel").show(ui, |ui| {
-            egui::MenuBar::new().ui(ui, |ui| {
-                ui.menu_button("Closet", |ui| {
-                    if ui.button("About").clicked() {
-                        self.windows.about.is_open = true;
-                        ui.close();
-                    }
-                    if ui.button("Check for updates").clicked() {}
-                    if ui.button("Quit").clicked() {
-                        ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
-                    }
-                });
-                ui.menu_button("File", |ui| {
-                    if ui.button("New").clicked() {
-                        //
-                    }
-                })
-            });
-        });
+        self.top_bar.show(ui, &mut self.windows.about);
         self.windows.about.show(ui);
+
+        if ui.button("Closet").clicked() {
+            //show top bar
+        }
     }
 }

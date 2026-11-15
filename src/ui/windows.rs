@@ -35,7 +35,7 @@ impl About {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
-        use egui::special_emojis::{OS_APPLE, OS_LINUX, OS_WINDOWS};
+        //use egui::special_emojis::{OS_APPLE, OS_LINUX, OS_WINDOWS};
         ui.vertical_centered(|ui| {
             ui.add_space(5.0);
             ui.add(
