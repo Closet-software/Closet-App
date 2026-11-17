@@ -11,7 +11,6 @@ struct Windows {
 pub struct MyApp {
     windows: Windows,
     top_bar: TopBar,
-    show_top_bar: bool,
 }
 
 impl eframe::App for MyApp {
@@ -21,9 +20,5 @@ impl eframe::App for MyApp {
             Some(egui::FontId::new(17.0, egui::FontFamily::Proportional));
         self.top_bar.show(ui, &mut self.windows.about);
         self.windows.about.show(ui);
-
-        if ui.button("Closet").clicked() {
-            //show top bar
-        }
     }
 }

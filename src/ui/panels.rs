@@ -4,6 +4,23 @@ use eframe::egui;
 #[derive(Default)]
 pub struct TopBar;
 
+
+pub struct Panels{
+    project_files: bool,
+    elements: bool,
+    console: bool,
+}
+
+impl Default for Panels {
+    fn default() -> Self {
+        Self {
+            project_files: true,
+            elements: true,
+            console: false,
+        }
+    }
+}
+
 impl TopBar {
     pub fn show(&mut self, ui: &mut egui::Ui, about: &mut About) {
         egui::Panel::top("top_panel").show(ui, |ui| {
@@ -27,5 +44,15 @@ impl TopBar {
                 });
             });
         });
+    }
+}
+
+impl Panels {
+    fn ui(&mut self, ui: &mut egui::Ui) {
+
+        let Self {
+            left,
+
+        }
     }
 }

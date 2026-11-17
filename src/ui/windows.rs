@@ -23,6 +23,7 @@ impl About {
             .default_height(480.0)
             .open(&mut is_open)
             .resizable([false, false])
+            .collapsible(false)
             .scroll(false)
             .constrain_to(ui.available_rect_before_wrap())
             .default_pos(center)
